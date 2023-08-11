@@ -104,7 +104,7 @@ spec:
 
           # Normal values
           orgName: ${{ parameters.orgName }}
-          repoName: ${{ parameters.repoName }}-gitops
+          repoName: ${{ parameters.repoName }}
           owner: ${{ parameters.owner }}
           system: ${{ parameters.system }}
           applicationType: gitops
@@ -141,7 +141,7 @@ spec:
       input:
         allowedHosts: ['github.com']
         description: Contains the ArgoCD manifests for ${{ parameters.repoName }}
-        repoUrl: github.com?owner=${{ parameters.orgName }}&repo=${{ parameters.repoName }}-gitops
+        repoUrl: github.com?owner=${{ parameters.orgName }}&repo=${{ parameters.repoName }}
         defaultBranch: main
 
     - id: register
