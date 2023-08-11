@@ -205,6 +205,26 @@ spec:
         protectDefaultBranch: false
         repoVisibility: public 
 
+    - id: template-gitops
+      name: Fetch Skeleton + Template
+      action: fetch:template
+      input:
+        url: ./app-gitops
+        copyWithoutTemplating: []
+        values: {}
+        targetPath: ./app-gitops
+
+    - id: publish
+      name: Publish
+      action: publish:github
+      input:
+        allowedHosts: ['github.com']
+        description: This is ${{ parameters.application_id }}
+        repoUrl: github.com?repo=${{ parameters.application_id }}-gitops&owner=${{ parameters.organization }}
+        repoVisibility: public
+        sourcePath: ./app-gitops
+        access: ${{ parameters.application_id }}/${{ parameters.owner }}
+
     - id: register
       name: Registering the Catalog Info Component
       action: catalog:register
