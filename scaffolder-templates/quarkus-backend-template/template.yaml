@@ -220,10 +220,11 @@ spec:
       input:
         allowedHosts: ['github.com']
         description: This is publishing gitOps
-        repoUrl: github.com?repo=${{ parameters.repoName }}-gitops&owner=${{ parameters.orgName }}
+        repoUrl: github.com?owner=${{parameters.orgName}}&repo=${{parameters.repoName}}-gitops
         repoVisibility: public
         sourcePath: ./app-gitops
-        access: ${{ parameters.application_id }}/${{ parameters.owner }}
+        protectDefaultBranch: false
+        defaultBranch: main
 
     - id: register
       name: Registering the Catalog Info Component
