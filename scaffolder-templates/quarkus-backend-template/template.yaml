@@ -215,12 +215,12 @@ spec:
         targetPath: ./app-gitops
 
     - id: publish
-      name: Publish
+      name: Publish GitOps
       action: publish:github
       input:
         allowedHosts: ['github.com']
-        description: This is ${{ parameters.application_id }}
-        repoUrl: github.com?repo=${{ parameters.application_id }}-gitops&owner=${{ parameters.organization }}
+        description: This is publishing gitOps
+        repoUrl: github.com?repo=${{ parameters.repoName }}-gitops&owner=${{ parameters.orgName }}
         repoVisibility: public
         sourcePath: ./app-gitops
         access: ${{ parameters.application_id }}/${{ parameters.owner }}
