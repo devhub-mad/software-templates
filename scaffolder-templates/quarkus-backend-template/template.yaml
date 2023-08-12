@@ -195,7 +195,7 @@ spec:
         url: ./manifests
         copyWithoutTemplating: []
         values:
-          component_id: ${{parameters.namespace}}-poi-backend-app
+          component_id: ${{parameters.namespace}}-${{ parameters.artifactId }}-gitops
           description: ${{parameters.description}}
           destination: https://github.com/${{parameters.orgName}}/${{parameters.repoName}}-gitops
           source_repository: https://github.com/${{parameters.orgName}}/${{parameters.repoName}}
