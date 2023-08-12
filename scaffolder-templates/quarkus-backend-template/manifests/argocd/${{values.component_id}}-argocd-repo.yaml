@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: Secret
 metadata:
-  name: ${{ values.artifactId}}-repo
+  name: ${{ values.component_id}}-repo
   namespace: devhub2
   labels:
     argocd.argoproj.io/secret-type: repository
