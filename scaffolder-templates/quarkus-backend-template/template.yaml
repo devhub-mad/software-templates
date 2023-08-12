@@ -21,6 +21,7 @@ spec:
         - owner
         - system
         - port
+        - cluster_id
       properties:
         orgName:
           title: Organization Name
@@ -41,6 +42,11 @@ spec:
               kind:
                 - Group
                 - User
+          cluster_id:
+            title: Cluster Id
+            type: string
+            description: Id of the cluster
+            default: .apps.xxx.com
         system:
           title: System
           type: string
@@ -188,7 +194,15 @@ spec:
       input:
         url: ./manifests
         copyWithoutTemplating: []
-        values: {}
+        values:
+          component_id: ${{parameters.namespace}}-poi-backend-app
+          description: ${{parameters.description}}
+          destination: https://github.com/${{parameters.orgName}}/${{parameters.repoName}}-gitops
+          source_repository: https://github.com/${{parameters.orgName}}/${{parameters.repoName}}
+          repository_name: ${{parameters.repoName}}
+          git_owner: ${{parameters.orgName}}
+          cluster: ${{parameters.cluster_id}}
+          namespace: ${{parameters.namespace}}
         targetPath: ./app-gitops
 
     - id: publishGitops
@@ -216,7 +230,7 @@ spec:
       input:
         appName: ${{parameters.namespace}}-orders
         argoInstance: main
-        namespace: janus-argocd
+        namespace: devhub2
         repoUrl: https://github.com/${{parameters.orgName}}/${{parameters.repoName}}-gitops.git
         path: 'argocd/'
 
