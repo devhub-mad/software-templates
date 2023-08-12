@@ -155,7 +155,7 @@ spec:
           - .github/workflows/
         values:
           orgName: ${{ parameters.orgName }}
-          repoName: ${{ parameters.repoName }}
+          repoName: ${{ parameters.repoName }}-gitops
           owner: ${{ parameters.owner }}
           system: ${{ parameters.system }}
           applicationType: api
@@ -209,34 +209,10 @@ spec:
       name: Fetch Skeleton + Template
       action: fetch:template
       input:
-        url: ./argocd
+        url: ./manifests
         copyWithoutTemplating: []
         values: {}
         targetPath: ./app-gitops
-
-    - id: catalogTemplate
-      name: Generating the Catalog Info Component- Gitops
-      action: fetch:template
-      input:
-        url: ../../scaffolder-skeletons/catalog-info-skeleton/
-        values:
-          # Gitops specific values
-          entityKind: Resource
-          dependsOn: ${{ parameters.componentName }}
-
-          # Normal values
-          orgName: ${{ parameters.orgName }}
-          repoName: ${{ parameters.repoName }}
-          owner: ${{ parameters.owner }}
-          system: ${{ parameters.system }}
-          applicationType: gitops
-          description: Contains the ArgoCD manifests for ${{ parameters.repoName }}
-          namespace: ${{ parameters.namespace }}
-          imageUrl: ${{ parameters.imageUrl }}
-          hostUrl: ${{ parameters.hostUrl }}
-          imageRepository: ${{ parameters.imageRepository }}
-          port: ${{ parameters.port }}
-          sourceControl: github.com
 
     - id: publish
       name: Publish GitOps
