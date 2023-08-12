@@ -42,11 +42,11 @@ spec:
               kind:
                 - Group
                 - User
-          cluster_id:
-            title: Cluster Id
-            type: string
-            description: Id of the cluster
-            default: .apps.xxx.com
+        cluster_id:
+          title: Cluster Id
+          type: string
+          description: Id of the cluster
+          default: .apps.xxx.com
         system:
           title: System
           type: string
