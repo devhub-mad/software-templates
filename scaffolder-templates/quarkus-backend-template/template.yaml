@@ -191,7 +191,7 @@ spec:
         values: {}
         targetPath: ./app-gitops
 
-    - id: publish
+    - id: publishGitops
       name: Publish GitOps
       action: publish:github
       input:
