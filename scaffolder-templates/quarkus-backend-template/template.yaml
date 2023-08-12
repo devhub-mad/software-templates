@@ -210,6 +210,16 @@ spec:
         repoContentsUrl: ${{ steps.publish.output.repoContentsUrl }}
         catalogInfoPath: /catalog-info.yaml
 
+    - id: createArgoResources
+      name: Create ArgoCD Resources
+      action: argocd:create-resources
+      input:
+        appName: ${{parameters.namespace}}-orders
+        argoInstance: main
+        namespace: janus-argocd
+        repoUrl: https://github.com/${{parameters.githubOrg}}/${{parameters.repoName}}-gitops.git
+        path: 'argocd/'
+
   output:
     links:
       - title: Open the Source Code Repository
