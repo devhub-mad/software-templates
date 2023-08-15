@@ -1,7 +1,7 @@
 apiVersion: triggers.tekton.dev/v1alpha1
 kind: TriggerTemplate
 metadata:
-  name: ${{ values.repoName }}-run-pipeline
+  name: ${{ values.repository_name }}-run-pipeline
   namespace: ${{ values.namespace }}
 spec:
   params:
@@ -12,12 +12,12 @@ spec:
       description: The repo url
     - name: output-image
       description: reference of the image that will get created
-      default: ${{ values.imageRepository }}/${{ values.imageUrl }}/${{ values.repoName }}
+      default: ${{ values.imageRepository }}/${{ values.imageUrl }}/${{ values.repository_name }}
   resourcetemplates:
     - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
       metadata:
-        name: ${{ values.repoName }}-pipeline-$(uid)
+        name: ${{ values.repository_name }}-pipeline-$(uid)
       spec:
         params:
           - name: source-repo
@@ -27,7 +27,7 @@ spec:
           - name: output-image
             value: $(tt.params.output-image)
         pipelineRef:
-          name: ${{ values.repoName }}-pipeline
+          name: ${{ values.repository_name }}-pipeline
         serviceAccountName: pipeline
         timeout: 1h0m0s
         workspaces:

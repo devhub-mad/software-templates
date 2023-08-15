@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
-  name: ${{ values.repoName }}-pipeline
+  name: ${{ values.repository_name }}-pipeline
   namespace: ${{ values.namespace }}
   labels:
     type: pipeline
@@ -10,14 +10,14 @@ spec:
     - name: source-repo
       description: source repo that contains the application code
       type: string
-      default: https://${{ values.sourceControl }}/${{ values.orgName }}/${{ values.repoName }}
+      default: https://${{ values.sourceControl }}/${{ values.orgName }}/${{ values.repository_name }}
     - name: source-branch
       description: source branch to build from
       default: main
       type: string
     - name: output-image
       description: reference of the image that will get created
-      default: ${{ values.imageRepository }}/${{ values.imageUrl }}/${{ values.repoName }}
+      default: ${{ values.imageRepository }}/${{ values.imageUrl }}/${{ values.repository_name }}
       type: string
   tasks:
     - name: git-clone

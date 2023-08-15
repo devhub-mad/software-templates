@@ -1,7 +1,7 @@
 apiVersion: triggers.tekton.dev/v1alpha1
 kind: EventListener
 metadata:
-  name: ${{ values.repoName }}-el
+  name: ${{ values.repository_name }}-el
   namespace: ${{ values.namespace }}
 spec:
   serviceAccountName: pipeline
@@ -24,4 +24,4 @@ spec:
           ref:
             name: cel
       template:
-        ref: ${{ values.repoName }}-run-pipeline
+        ref: ${{ values.repository_name }}-run-pipeline
