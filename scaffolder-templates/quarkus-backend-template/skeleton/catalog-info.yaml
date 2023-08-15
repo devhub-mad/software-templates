@@ -35,8 +35,6 @@ kind: System
 metadata:
   name: workshop-system-${{values.namespace}}
   tags:
-    - backstage
-    - janus-idp
     - openshift
     - workshop
     - rhdh
