@@ -3,18 +3,18 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: ${{ values.component_id }}-dev-build
-  namespace: janus-argocd
+  namespace: devhub
   finalizers:
     - resources-finalizer.argocd.argoproj.io  
 spec:
-  project: janus
+  project: default
   source:
     repoURL: ${{ values.destination }}
     targetRevision: HEAD
-    path: ./helm/build
+    path: ./helm/pipeline
   destination:
     server: https://kubernetes.default.svc
-    namespace: ${{ values.component_id }}-dev
+    namespace: ${{ values.namespace }}
   syncPolicy:
     automated: 
       prune: true

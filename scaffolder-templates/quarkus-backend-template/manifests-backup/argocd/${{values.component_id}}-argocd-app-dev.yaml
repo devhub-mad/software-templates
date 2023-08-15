@@ -2,19 +2,19 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: ${{ values.component_id }}-dev-build
-  namespace: janus-argocd
+  name: ${{ values.component_id }}-dev
+  namespace: devhub
   finalizers:
     - resources-finalizer.argocd.argoproj.io  
 spec:
-  project: janus
+  project: default
   source:
     repoURL: ${{ values.destination }}
     targetRevision: HEAD
-    path: ./helm/build
+    path: ./helm/app
   destination:
     server: https://kubernetes.default.svc
-    namespace: ${{ values.component_id }}-dev
+    namespace: ${{ values.namespace }}
   syncPolicy:
     automated: 
       prune: true
@@ -27,4 +27,4 @@ spec:
       backoff:
         duration: 5s # the amount to back off. Default unit is seconds, but could also be a duration (e.g. "2m", "1h")
         factor: 2 # a factor to multiply the base duration after each failed retry
-        maxDuration: 10m # the maximum amount of time allowed for the backoff strategy      
+        maxDuration: 10m # the maximum amount of time allowed for the backoff strategy
