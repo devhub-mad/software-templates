@@ -3,7 +3,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: ${{ values.component_id }}-dev-build
-  namespace: devhub2
+  namespace: devhub
   finalizers:
     - resources-finalizer.argocd.argoproj.io  
 spec:
@@ -14,7 +14,7 @@ spec:
     path: ./helm/pipeline
   destination:
     server: https://kubernetes.default.svc
-    namespace: ${{ values.component_id }}-dev
+    namespace: ${{ values.namespace }}
   syncPolicy:
     automated: 
       prune: true
