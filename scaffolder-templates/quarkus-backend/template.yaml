@@ -80,7 +80,7 @@ spec:
         targetPath: ./source
         values:
           githubOrg: ${{parameters.githubOrg}}
-          repoName: ${{parameters.component_id}}
+          repoName: ${{parameters.namespace}}-${{parameters.component_id}}
           owner: ${{parameters.owner}}
           cluster_id: ${{parameters.cluster_id}}
           namespace: ${{parameters.namespace}}
@@ -93,7 +93,7 @@ spec:
         allowedHosts:
           - github.com
         description: ${{parameters.description}}
-        repoUrl: github.com?owner=${{parameters.githubOrg}}&repo=${{parameters.component_id}}
+        repoUrl: github.com?owner=${{parameters.githubOrg}}&repo=${{parameters.namespace}}-${{parameters.component_id}}
         defaultBranch: main
         protectDefaultBranch: false
         repoVisibility: public    
@@ -112,8 +112,8 @@ spec:
         values:
           component_id: ${{parameters.component_id}}
           description: ${{parameters.description}}
-          destination: https://github.com/${{parameters.githubOrg}}/${{parameters.component_id}}-gitops
-          source_repository: https://github.com/${{parameters.githubOrg}}/${{parameters.component_id}}
+          destination: https://github.com/${{parameters.githubOrg}}/${{parameters.namespace}}-${{parameters.component_id}}-gitops
+          source_repository: https://github.com/${{parameters.githubOrg}}/${{parameters.namespace}}-${{parameters.component_id}}
           repository_name: ${{parameters.component_id}}
           git_owner: ${{parameters.githubOrg}}
           cluster: ${{parameters.cluster_id}}
@@ -126,7 +126,7 @@ spec:
       name: Publishing to Deployment Resource Repository
       action: publish:github
       input:
-        repoUrl: github.com?owner=${{parameters.githubOrg}}&repo=${{parameters.component_id}}-gitops
+        repoUrl: github.com?owner=${{parameters.githubOrg}}&repo=$${{parameters.namespace}}-${{parameters.component_id}}-gitops
         title: gitops resources for ${{parameters.namespace}}
         description: gitops resources for ${{parameters.namespace}}
         sourcePath: ./tenant-gitops
@@ -140,7 +140,7 @@ spec:
         appName: ${{parameters.component_id}}
         argoInstance: main
         namespace: ${{parameters.namespace}}
-        repoUrl: https://github.com/${{parameters.githubOrg}}/${{parameters.component_id}}-gitops.git
+        repoUrl: https://github.com/${{parameters.githubOrg}}/${{parameters.namespace}}-${{parameters.component_id}}-gitops.git
         path: 'argocd/'
   output:
     links:
