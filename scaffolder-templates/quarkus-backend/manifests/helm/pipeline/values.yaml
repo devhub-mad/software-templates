@@ -3,9 +3,9 @@ app:
   namespace: ${{values.namespace}}
   cluster: ${{values.cluster}}
 
-git:
+source:
   branch: main
-  repo: ${{values.source_repository}}
+  repository_name: ${{values.source_repository}}
   org: ${{values.git_owner}}
   name: ${{values.repository_name}}
 

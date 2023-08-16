@@ -8,3 +8,4 @@ spec:
   targets:
     - https://github.com/devhub-mad/software-templates/blob/impl/scaffolder-templates/quarkus-backend/template.yaml
     - https://github.com/devhub-mad/software-templates/blob/impl/scaffolder-templates/angular/template.yaml
+    - https://github.com/devhub-mad/software-templates/blob/impl/scaffolder-templates/quarkus-backend-new/template.yaml
