@@ -132,7 +132,7 @@ spec:
       input:
         appName: ${{parameters.namespace}}-app-backend-app-bootstrap
         argoInstance: main
-        namespace: devhub-test
+        namespace: devhub
         repoUrl: https://github.com/${{parameters.githubOrg}}/${{parameters.namespace}}-backend-gitops.git
         path: 'argocd/'
   output:
