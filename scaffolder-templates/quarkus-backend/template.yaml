@@ -42,7 +42,7 @@ spec:
           title: Namespace
           type: string
           description: Namespace
-        namespace: 
+        component_id: 
           title: Component name
           type: string
           description: Namespace
