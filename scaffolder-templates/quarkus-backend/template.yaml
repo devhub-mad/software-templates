@@ -46,6 +46,8 @@ spec:
           title: Component name
           type: string
           description: Namespace
+          default: my-quarkus-app
+          ui:field: EntityNamePicker
         owner:
           title: Owner
           type: string
