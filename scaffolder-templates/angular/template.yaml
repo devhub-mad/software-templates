@@ -1,9 +1,9 @@
 apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
-  name: angular-template
+  name: angular2-template
   title: Angular App
-  description: creates the angular spa for the workshop
+  description: creates the angular for the workshop
   tags:
     - typescript
     - angular

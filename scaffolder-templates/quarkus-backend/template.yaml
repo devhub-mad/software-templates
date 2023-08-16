@@ -1,9 +1,9 @@
 apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
-  name: app-backend-template
+  name: app2-backend-template
   title: Quarkus Backend Application
-  description: creates the quarkus poi backend app for the workshop
+  description: creates the quarkus backend app for the workshop
   tags:
     - java
     - quarkus
