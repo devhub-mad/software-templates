@@ -131,7 +131,7 @@ spec:
       input:
         appName: ${{parameters.namespace}}-angular-app-bootstrap
         argoInstance: main
-        namespace: /devhub
+        namespace: devhub
         repoUrl: https://github.com/${{parameters.githubOrg}}/${{parameters.namespace}}-frontend-gitops.git
         path: 'argocd/'
   output:
