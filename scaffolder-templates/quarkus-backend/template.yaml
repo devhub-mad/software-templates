@@ -96,7 +96,7 @@ spec:
         protectDefaultBranch: false
         repoVisibility: public    
     - id: registerSource
-      name: Registering the Source Code Componentcomponent_id
+      name: Registering the Source Code Component ${{parameters.component_id}}
       action: catalog:register
       input:
         repoContentsUrl: ${{steps.publishSource.output.repoContentsUrl}}
@@ -110,9 +110,9 @@ spec:
         values:
           component_id: ${{parameters.component_id}}
           description: ${{parameters.description}}
-          destination: https://github.com/${{parameters.githubOrg}}/${{parameters.namespace}}-gitops
-          source_repository: https://github.com/${{parameters.githubOrg}}/${{parameters.namespace}}
-          repository_name: ${{parameters.namespace}}
+          destination: https://github.com/${{parameters.githubOrg}}/${{parameters.component_id}}-gitops
+          source_repository: https://github.com/${{parameters.githubOrg}}/${{parameters.component_id}}
+          repository_name: ${{parameters.component_id}}
           git_owner: ${{parameters.githubOrg}}
           cluster: ${{parameters.cluster_id}}
           namespace: ${{parameters.namespace}}
