@@ -3,7 +3,7 @@
 # Declare variables to be passed into your templates.
 
 app:
-  componentId: ${{values.component_id}}
+  componentId: ${{parameters.component_id}}-backend-dev
   namespace: ${{values.namespace}}
 
 namespace:
