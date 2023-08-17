@@ -1,8 +1,8 @@
----
 apiVersion: triggers.tekton.dev/v1alpha1
 kind: EventListener
 metadata:
-  name: {{ .Values.app.name }}-el
+  name: ${{ values.repository_name }}-el
+  namespace: ${{ values.namespace }}
 spec:
   serviceAccountName: pipeline
   triggers:
@@ -12,16 +12,16 @@ spec:
       interceptors:
         - params:
             - name: eventTypes
-              value: ["push"]
+              value: ['push']
           ref:
             name: github
         - params:
             - name: git-revision
               value: >-
-                (body.ref.contains('{{ .Values.git.branch }}'))
+                (body.ref.contains('main'))
             - name: overlays
               value: null
           ref:
             name: cel
       template:
-        ref: {{ .Values.app.name }}-run-pipeline
+        ref: ${{ values.repository_name }}-run-pipeline

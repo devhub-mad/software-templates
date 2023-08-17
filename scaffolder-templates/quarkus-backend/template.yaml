@@ -53,6 +53,7 @@ spec:
       required:
         - image_host
         - image_tag
+        - component_id
       properties:
         image_host:
           title: Image Host
@@ -64,6 +65,11 @@ spec:
           default: latest
           type: string
           description: Image tag to use for storing in the internal registry
+        component_id:
+          title: Component ID
+          default: ${{parameters.component_id}}-backend
+          type: string
+          description: Comp Id
   steps:
     - id: templateSource
       name: Generating the source code component
@@ -73,11 +79,10 @@ spec:
         targetPath: ./source
         values:
           githubOrg: ${{parameters.githubOrg}}
-          repoName: ${{parameters.namespace}}-backend
           owner: ${{parameters.owner}}
           cluster_id: ${{parameters.cluster_id}}
           namespace: ${{parameters.namespace}}
-          component_id: ${{parameters.namespace}}-app-backend-app
+          component_id: ${{parameters.component_id}}-backend
     - id: publishSource
       name: Publishing to Source Code Repository
       action: publish:github
@@ -86,7 +91,7 @@ spec:
         allowedHosts:
           - github.com
         description: ${{parameters.description}}
-        repoUrl: github.com?owner=${{parameters.githubOrg}}&repo=${{parameters.namespace}}-backend
+        repoUrl: github.com?owner=${{parameters.githubOrg}}&repo=${{parameters.component_id}}-backend
         defaultBranch: main
         protectDefaultBranch: false
         repoVisibility: public    
@@ -103,23 +108,23 @@ spec:
         url: ./manifests
         copyWithoutTemplating: []
         values:
-          component_id: ${{parameters.namespace}}-app-backend-app
+          component_id: ${{parameters.component_id}}
           description: ${{parameters.description}}
-          destination: https://github.com/${{parameters.githubOrg}}/${{parameters.namespace}}-backend-gitops
-          source_repository: https://github.com/${{parameters.githubOrg}}/${{parameters.namespace}}-backend
-          repository_name: ${{parameters.namespace}}-backend
+          destination: https://github.com/${{parameters.githubOrg}}/${{parameters.component_id}}-backend-gitops
+          source_repository: https://github.com/${{parameters.githubOrg}}/${{parameters.component_id}}-backend
+          repository_name: ${{parameters.component_id}}-backend
           git_owner: ${{parameters.githubOrg}}
           cluster: ${{parameters.cluster_id}}
           namespace: ${{parameters.namespace}}
           image_host: ${{parameters.image_host}}
-          image_name: ${{parameters.namespace}}/app-backend-app
+          image_name: ${{parameters.component_id}}-backend
           image_tag: ${{parameters.image_tag}}
         targetPath: ./tenant-gitops
     - id: publishGitops
       name: Publishing to Deployment Resource Repository
       action: publish:github
       input:
-        repoUrl: github.com?owner=${{parameters.githubOrg}}&repo=${{parameters.namespace}}-backend-gitops
+        repoUrl: github.com?owner=${{parameters.githubOrg}}&repo=${{parameters.component_id}}-backend-gitops
         title: gitops resources for ${{parameters.namespace}}-app-backend-app
         description: gitops resources for ${{parameters.namespace}}-app-backend-app
         sourcePath: ./tenant-gitops
@@ -132,8 +137,8 @@ spec:
       input:
         appName: ${{parameters.namespace}}-app-backend-app-bootstrap
         argoInstance: main
-        namespace: devhub
-        repoUrl: https://github.com/${{parameters.githubOrg}}/${{parameters.namespace}}-backend-gitops.git
+        namespace: ${{parameters.namespace}}
+        repoUrl: https://github.com/${{parameters.githubOrg}}/${{parameters.component_id}}-backend-gitops.git
         path: 'argocd/'
   output:
     links:
