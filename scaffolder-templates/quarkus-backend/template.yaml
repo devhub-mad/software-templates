@@ -92,6 +92,8 @@ spec:
         allowedHosts:
           - github.com
         description: ${{parameters.description}}
+        values:
+          repoName: ${{parameters.namespace}}-backend
         repoUrl: github.com?owner=${{parameters.githubOrg}}&repo=${{parameters.repoName}}
         defaultBranch: main
         protectDefaultBranch: false
@@ -113,6 +115,7 @@ spec:
           description: ${{parameters.description}}
           destination: https://github.com/${{parameters.githubOrg}}/${{parameters.repoName}}-gitops
           source_repository: https://github.com/${{parameters.githubOrg}}/${{parameters.repoName}}
+          repoName: ${{parameters.namespace}}-backend
           repository_name: ${{parameters.repoName}}
           git_owner: ${{parameters.githubOrg}}
           cluster: ${{parameters.cluster_id}}
@@ -125,6 +128,8 @@ spec:
       name: Publishing to Deployment Resource Repository
       action: publish:github
       input:
+        values:
+          repoName: ${{parameters.namespace}}-backend
         repoUrl: github.com?owner=${{parameters.githubOrg}}&repo=${{parameters.repoName}}-gitops
         title: gitops resources for ${{parameters.namespace}}-app-backend-app
         description: gitops resources for ${{parameters.namespace}}-app-backend-app
@@ -136,6 +141,8 @@ spec:
       name: Create ArgoCD Resources
       action: argocd:create-resources
       input:
+        values:
+          repoName: ${{parameters.namespace}}-backend
         appName: ${{parameters.namespace}}-app-backend-app-bootstrap
         argoInstance: main
         namespace: ${{parameters.namespace}}
