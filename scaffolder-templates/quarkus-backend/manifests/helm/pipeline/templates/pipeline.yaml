@@ -23,7 +23,7 @@ spec:
   tasks:
   - name: clone-repository
     taskRef:
-      name: git-clone
+      name: {{ .Values.app.name }}-git-clone
     params:
     - name: url
       value: $(params.git-url)
@@ -41,7 +41,7 @@ spec:
     runAfter:
     - clone-repository
     taskRef:
-      name: maven-with-subdir
+      name: {{ .Values.app.name }}-maven-with-subdir
     params:
     - name: GOALS
       value:
@@ -57,7 +57,7 @@ spec:
     runAfter:
     - build-artifact
     taskRef:
-      name: buildah
+      name: {{ .Values.app.name }}-buildah
       kind: ClusterTask
     params:
     - name: IMAGE
@@ -76,7 +76,7 @@ spec:
     runAfter:
     - build-image
     taskRef:
-      name: update-manifest
+      name: {{ .Values.app.name }}-update-manifest
     params:
     - name: short-commit
       value: $(tasks.clone-repository.results.short-commit)
