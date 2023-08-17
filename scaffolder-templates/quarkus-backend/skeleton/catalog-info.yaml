@@ -1,45 +1,50 @@
 apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
-  name: ${{values.component_id | dump}}
+  name: ${{values.component_id}}-dev
   {%- if values.description %}
-  description: ${{values.description | dump}}
+  description: ${{values.description}}
   {%- endif %}
   annotations:
     argocd/app-name: ${{values.component_id}}-dev
     backstage.io/kubernetes-id: ${{values.component_id}}
-    backstage.io/kubernetes-namespace: ${{values.component_id}}-dev
-    janus-idp.io/tekton-enabled : 'true'
-    github.com/project-slug: ${{values.destination}}
-    quay.io/repository-slug: ${{values.quay_destination | dump}}
+    backstage.io/kubernetes-namespace: ${{values.namespace}}
     backstage.io/techdocs-ref: dir:.
+    github.com/project-slug: ${{values.githubOrg}}/${{values.repoName}}
+    janus-idp.io/tekton-enabled: 'true'
   tags:
     - java
     - quarkus
+    - maven
+    - workshop
   links:
-    - url: https://devspaces${{values.cluster}}/#https://github.com/${{values.destination}}?che-editor=che-incubator/che-code/insiders&devfilePath=.devfile-vscode.yaml
-      title: OpenShift Dev Spaces (VS Code)
+    - url: https://console-openshift-console${{values.cluster_id}}/dev-pipelines/ns/${{values.namespace}}/
+      title: Pipelines
       icon: web
-    - url: https://devspaces${{values.cluster}}/#https://github.com/${{values.destination}}?che-editor=che-incubator/che-idea/latest&devfilePath=.devfile-intellij.yaml
-      title: OpenShift Dev Spaces (JetBrains IntelliJ)
+    - url: https://console-openshift-console${{values.cluster_id}}/k8s/ns/${{values.namespace}}/deployments/${{values.component_id}}
+      title: Deployment
+      icon: web
+    - url: https://devspaces${{values.cluster_id}}/#https://github.com/${{values.githubOrg}}/${{values.repoName}}?che-editor=che-incubator/che-code/latest&devfilePath=.devfile-vscode.yaml
+      title: OpenShift Dev Spaces (VS Code)
       icon: web
 spec:
   type: service
   lifecycle: production
   owner: ${{values.owner | dump}}
+  system: workshop-system-${{values.namespace}}
   providesApis:
-    - ${{values.component_id | dump}}
+    - backend-api-${{values.namespace}}
 ---
 apiVersion: backstage.io/v1alpha1
-kind: API
+kind: System
 metadata:
-  name: ${{values.component_id | dump}}
-  {%- if values.description %}
-  description: ${{values.description | dump}}
-  {%- endif %}
+  name: workshop-system-${{values.namespace}}
+  tags:
+    - backstage
+    - janus-idp
+    - openshift
+    - workshop
+    - rh-summit
 spec:
-  type: openapi
-  lifecycle: production
   owner: ${{values.owner | dump}}
-  definition:
-    $text: ./openapi.yaml
+
