@@ -1,8 +1,8 @@
 apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
-  name: app-new-backend-template
-  title: Quarkus New Backend Application
+  name: app2-backend-template
+  title: Quarkus Backend Application
   description: creates the quarkus backend app for the workshop
   tags:
     - java
@@ -31,7 +31,6 @@ spec:
         - cluster_id
         - namespace
         - owner
-        - component_id
       properties:
         cluster_id:
           title: Cluster Id
@@ -42,12 +41,6 @@ spec:
           title: Namespace
           type: string
           description: Namespace
-        component_id: 
-          title: Component name
-          type: string
-          description: Namespace
-          default: my-quarkus-app
-          ui:field: EntityNamePicker
         owner:
           title: Owner
           type: string
@@ -80,11 +73,11 @@ spec:
         targetPath: ./source
         values:
           githubOrg: ${{parameters.githubOrg}}
-          repoName: ${{parameters.namespace}}-${{parameters.component_id}}
+          repoName: ${{parameters.namespace}}-backend
           owner: ${{parameters.owner}}
           cluster_id: ${{parameters.cluster_id}}
           namespace: ${{parameters.namespace}}
-          component_id: ${{parameters.component_id}}
+          component_id: ${{parameters.namespace}}-app-backend-app
     - id: publishSource
       name: Publishing to Source Code Repository
       action: publish:github
@@ -93,12 +86,12 @@ spec:
         allowedHosts:
           - github.com
         description: ${{parameters.description}}
-        repoUrl: github.com?owner=${{parameters.githubOrg}}&repo=${{parameters.namespace}}-${{parameters.component_id}}
+        repoUrl: github.com?owner=${{parameters.githubOrg}}&repo=${{parameters.namespace}}-backend
         defaultBranch: main
         protectDefaultBranch: false
         repoVisibility: public    
     - id: registerSource
-      name: Registering the Source Code Component ${{parameters.component_id}}
+      name: Registering the Source Code Component
       action: catalog:register
       input:
         repoContentsUrl: ${{steps.publishSource.output.repoContentsUrl}}
@@ -110,25 +103,25 @@ spec:
         url: ./manifests
         copyWithoutTemplating: []
         values:
-          component_id: ${{parameters.component_id}}
+          component_id: ${{parameters.namespace}}-app-backend-app
           description: ${{parameters.description}}
-          destination: https://github.com/${{parameters.githubOrg}}/${{parameters.namespace}}-${{parameters.component_id}}-gitops
-          source_repository: https://github.com/${{parameters.githubOrg}}/${{parameters.namespace}}-${{parameters.component_id}}
-          repository_name: ${{parameters.component_id}}
+          destination: https://github.com/${{parameters.githubOrg}}/${{parameters.namespace}}-backend-gitops
+          source_repository: https://github.com/${{parameters.githubOrg}}/${{parameters.namespace}}-backend
+          repository_name: ${{parameters.namespace}}-backend
           git_owner: ${{parameters.githubOrg}}
           cluster: ${{parameters.cluster_id}}
           namespace: ${{parameters.namespace}}
           image_host: ${{parameters.image_host}}
-          image_name: ${{parameters.namespace}}/${{parameters.component_id}}
+          image_name: ${{parameters.namespace}}/app-backend-app
           image_tag: ${{parameters.image_tag}}
         targetPath: ./tenant-gitops
     - id: publishGitops
       name: Publishing to Deployment Resource Repository
       action: publish:github
       input:
-        repoUrl: github.com?owner=${{parameters.githubOrg}}&repo=$${{parameters.namespace}}-${{parameters.component_id}}-gitops
-        title: gitops resources for ${{parameters.namespace}}
-        description: gitops resources for ${{parameters.namespace}}
+        repoUrl: github.com?owner=${{parameters.githubOrg}}&repo=${{parameters.namespace}}-backend-gitops
+        title: gitops resources for ${{parameters.namespace}}-app-backend-app
+        description: gitops resources for ${{parameters.namespace}}-app-backend-app
         sourcePath: ./tenant-gitops
         defaultBranch: main
         protectDefaultBranch: false
@@ -137,17 +130,17 @@ spec:
       name: Create ArgoCD Resources
       action: argocd:create-resources
       input:
-        appName: ${{parameters.component_id}}
+        appName: ${{parameters.namespace}}-app-backend-app-bootstrap
         argoInstance: main
-        namespace: ${{parameters.namespace}}
-        repoUrl: https://github.com/${{parameters.githubOrg}}/${{parameters.namespace}}-${{parameters.component_id}}-gitops.git
+        namespace: devhub
+        repoUrl: https://github.com/${{parameters.githubOrg}}/${{parameters.namespace}}-backend-gitops.git
         path: 'argocd/'
   output:
     links:
       - title: Source Code Repository
         url: ${{steps.publishSource.output.remoteUrl}}
       - title: Pipeline status
-        url: https://console-openshift-console${{parameters.cluster_id}}/pipelines/ns/${{parameters.namespace}}/
+        url: https://console-openshift-console${{parameters.cluster_id}}/dev-pipelines/ns/${{parameters.namespace}}/
       - title: Open Component in catalog
         icon: catalog
         entityRef: ${{steps.registerSource.output.entityRef}}
