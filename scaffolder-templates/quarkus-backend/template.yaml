@@ -92,7 +92,7 @@ spec:
         allowedHosts:
           - github.com
         description: ${{parameters.description}}
-        repoUrl: github.com?owner=${{parameters.githubOrg}}&repo=${{parameters.namespace}}-backend
+        repoUrl: github.com?owner=${{parameters.githubOrg}}&repo=${{parameters.repoName}}
         defaultBranch: main
         protectDefaultBranch: false
         repoVisibility: public    
@@ -111,9 +111,9 @@ spec:
         values:
           component_id: ${{parameters.component_id}}
           description: ${{parameters.description}}
-          destination: https://github.com/${{parameters.githubOrg}}/${{parameters.namespace}}-backend-gitops
-          source_repository: https://github.com/${{parameters.githubOrg}}/${{parameters.namespace}}-backend
-          repository_name: ${{parameters.namespace}}-backend
+          destination: https://github.com/${{parameters.githubOrg}}/${{parameters.repoName}}-gitops
+          source_repository: https://github.com/${{parameters.githubOrg}}/${{parameters.repoName}}
+          repository_name: ${{parameters.repoName}}
           git_owner: ${{parameters.githubOrg}}
           cluster: ${{parameters.cluster_id}}
           namespace: ${{parameters.namespace}}
@@ -125,7 +125,7 @@ spec:
       name: Publishing to Deployment Resource Repository
       action: publish:github
       input:
-        repoUrl: github.com?owner=${{parameters.githubOrg}}&repo=${{parameters.namespace}}-backend-gitops
+        repoUrl: github.com?owner=${{parameters.githubOrg}}&repo=${{parameters.repoName}}-gitops
         title: gitops resources for ${{parameters.namespace}}-app-backend-app
         description: gitops resources for ${{parameters.namespace}}-app-backend-app
         sourcePath: ./tenant-gitops
@@ -138,8 +138,8 @@ spec:
       input:
         appName: ${{parameters.namespace}}-app-backend-app-bootstrap
         argoInstance: main
-        namespace: devhub
-        repoUrl: https://github.com/${{parameters.githubOrg}}/${{parameters.namespace}}-backend-gitops.git
+        namespace: ${{parameters.namespace}}
+        repoUrl: https://github.com/${{parameters.githubOrg}}/${{parameters.repoName}}-gitops.git
         path: 'argocd/'
   output:
     links:
