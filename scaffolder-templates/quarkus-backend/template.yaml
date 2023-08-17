@@ -125,8 +125,8 @@ spec:
       action: publish:github
       input:
         repoUrl: github.com?owner=${{parameters.githubOrg}}&repo=${{parameters.component_id}}-backend-gitops
-        title: gitops resources for ${{parameters.namespace}}-app-backend-app
-        description: gitops resources for ${{parameters.namespace}}-app-backend-app
+        title: gitops resources for ${{parameters.namespace}}-backend-gitops
+        description: gitops resources for ${{parameters.namespace}}-backend-gitops
         sourcePath: ./tenant-gitops
         defaultBranch: main
         protectDefaultBranch: false
@@ -135,7 +135,7 @@ spec:
       name: Create ArgoCD Resources
       action: argocd:create-resources
       input:
-        appName: ${{parameters.namespace}}-app-backend-app-bootstrap
+        appName: ${{parameters.namespace}}-backend-gitops
         argoInstance: main
         namespace: ${{parameters.namespace}}
         repoUrl: https://github.com/${{parameters.githubOrg}}/${{parameters.component_id}}-backend-gitops.git

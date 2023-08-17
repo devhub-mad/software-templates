@@ -44,7 +44,6 @@ metadata:
     - janus-idp
     - openshift
     - workshop
-    - rh-summit
 spec:
   owner: ${{values.owner | dump}}
 
