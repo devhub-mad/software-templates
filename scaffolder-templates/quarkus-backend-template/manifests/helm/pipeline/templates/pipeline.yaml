@@ -1,23 +1,24 @@
-apiVersion: tekton.dev/v1beta1
+---
+apiVersion: tekton.dev/v1
 kind: Pipeline
 metadata:
-  name: ${{ values.repository_name }}-pipeline
-  namespace: ${{ values.namespace }}
+  name: {{ .Values.app.name }}-pipeline
   labels:
     type: pipeline
+    backstage.io/kubernetes-id: ${{values.component_id}}
 spec:
   params:
     - name: source-repo
       description: source repo that contains the application code
       type: string
-      default: https://${{ values.sourceControl }}/${{ values.orgName }}/${{ values.repository_name }}
+      default: {{ .Values.git.repo }}
     - name: source-branch
       description: source branch to build from
-      default: main
+      default: {{ .Values.git.branch }}
       type: string
     - name: output-image
       description: reference of the image that will get created
-      default: ${{ values.imageRepository }}/${{ values.imageUrl }}/${{ values.repository_name }}
+      default: {{ include "image.url" . }}
       type: string
   tasks:
     - name: git-clone
@@ -32,19 +33,29 @@ spec:
       workspaces:
         - name: output
           workspace: source-folder
-    - name: ${{ values.imageBuilder }}
-      params:
-        - name: VERSION
-          value: latest
-        - name: IMAGE
-          value: $(params.output-image)
+    - name: package
       runAfter:
         - git-clone
       taskRef:
         kind: ClusterTask
-        name: ${{ values.imageBuilder }}
+        name: maven
+      workspaces:
+        - name: source
+          workspace: source-folder
+        - name: maven-settings
+          workspace: maven-settings
+    - name: build-and-push
+      params:
+        - name: IMAGE
+          value: $(params.output-image)
+      runAfter:
+        - package
+      taskRef:
+        kind: Task
+        name: kaniko-backend
       workspaces:
         - name: source
           workspace: source-folder
   workspaces:
     - name: source-folder
+    - name: maven-settings
