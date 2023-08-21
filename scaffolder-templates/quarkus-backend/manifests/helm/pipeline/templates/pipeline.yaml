@@ -38,20 +38,17 @@ spec:
     - name: output
       workspace: ws
 
-  - name: build-artifact
-    runAfter:
-    - clone-repository
-    taskRef:
-      name: {{ .Values.app.name }}-maven-with-subdir
-    params:
-    - name: GOALS
-      value:
-      - "package"
-    - name: subdirectory
-      value: source
-    workspaces:
-    - name: source
-      workspace: ws
+   - name: package
+      runAfter:
+        - git-clone
+      taskRef:
+        kind: ClusterTask
+        name: maven
+      workspaces:
+        - name: source
+          workspace: source
+        - name: maven-settings
+          workspace: maven-settings
 
   - name: build-image
     runAfter:
@@ -63,9 +60,9 @@ spec:
     - name: IMAGE
       value: $(params.output-image)
     - name: DOCKERFILE
-      value: ./source/Dockerfile
+      value: source/Dockerfile
     - name: CONTEXT
-      value: ./source
+      value: source
     - name: TLSVERIFY
       value: "false"
     workspaces:
