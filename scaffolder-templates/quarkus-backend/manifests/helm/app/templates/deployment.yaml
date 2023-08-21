@@ -4,6 +4,7 @@ metadata:
   name: {{ .Values.applicationName }}
   labels:
     app: {{ .Values.applicationName }}
+    backstage.io/kubernetes-id: {{ .Values.applicationName }}
 spec:
   strategy:
     type: {{ .Values.deploymentStrategy.type }}
