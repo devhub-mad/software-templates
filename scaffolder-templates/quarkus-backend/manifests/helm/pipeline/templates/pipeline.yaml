@@ -57,7 +57,7 @@ spec:
     runAfter:
     - build-artifact
     taskRef:
-      name: {{ .Values.app.name }}-buildah
+      name: buildah
       kind: ClusterTask
     params:
     - name: IMAGE
