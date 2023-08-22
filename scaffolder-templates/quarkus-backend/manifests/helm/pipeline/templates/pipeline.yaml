@@ -57,6 +57,9 @@ spec:
         workspace: maven-local-m2
 
   - name: build-and-push
+    params:
+      - name: IMAGE
+        value: $(params.output-image)
     runAfter:
     - maven-run
     taskRef:
@@ -65,11 +68,6 @@ spec:
     workspaces:
       - name: source
         workspace: shared-workspace
-    workspaces:
-    - name: source
-      workspace: ws
-    - name: maven-settings
-      workspace: maven-settings
   workspaces:
     - name: shared-workspace
     - name: maven-settings
