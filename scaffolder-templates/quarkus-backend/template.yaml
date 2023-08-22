@@ -83,6 +83,7 @@ spec:
           cluster_id: ${{parameters.cluster_id}}
           namespace: ${{parameters.namespace}}
           component_id: ${{parameters.component_id}}-backend
+          repoName: ${{parameters.component_id}}-backend
     - id: publishSource
       name: Publishing to Source Code Repository
       action: publish:github
