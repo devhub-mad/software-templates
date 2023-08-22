@@ -1,0 +1,16 @@
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  name: {{ .Values.app.name }}-maven-test-pipeline-run
+spec:
+  pipelineRef:
+    name: {{ .Values.app.name }}-pipeline
+  workspaces:
+    - name: maven-settings
+      emptyDir: {}
+    - name: shared-workspace
+      persistentvolumeclaim:
+        claimName: {{ .Values.app.name }}-maven-local-m2-pvc
+    - name: maven-local-m2
+      persistentvolumeclaim:
+        claimName: {{ .Values.app.name }}-maven-local-m2-pvc

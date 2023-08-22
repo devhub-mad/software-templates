@@ -22,66 +22,55 @@ spec:
   - name: ws
 
   tasks:
-  - name: clone-repository
-    taskRef:
-      name: {{ .Values.app.name }}-git-clone
+  - name: fetch-repository
     params:
-    - name: url
-      value: $(params.git-url)
-    - name: revision
-      value: $(params.git-branch)
-    - name: subdirectory
-      value: source
-    - name: deleteExisting
-      value: "true"
-    workspaces:
-    - name: output
-      workspace: ws
-  - name: package
-    runAfter:
-    - git-clone
+      - name: url
+        value: $(params.git-url)
+      - name: subdirectory
+        value: ''
+      - name: deleteExisting
+        value: "true"
     taskRef:
       kind: ClusterTask
+      name: git-clone
+    workspaces:
+      - name: output
+        workspace: shared-workspace
+  - name: maven-run
+    params:
+      - name: GOALS
+        value:
+          - '-DskipTests'
+          - clean
+          - package
+    runAfter:
+      - fetch-repository
+    taskRef:
+      kind: Task
       name: maven
     workspaces:
-      - name: source
-        workspace: source
       - name: maven-settings
         workspace: maven-settings
+      - name: source
+        workspace: shared-workspace
+      - name: maven-local-repo
+        workspace: maven-local-m2
 
-  - name: build-image
+  - name: build-and-push
     runAfter:
-    - build-artifact
+    - maven-run
     taskRef:
-      name: buildah
       kind: ClusterTask
-    params:
-    - name: IMAGE
-      value: $(params.output-image)
-    - name: DOCKERFILE
-      value: source/Dockerfile
-    - name: CONTEXT
-      value: source
-    - name: TLSVERIFY
-      value: "false"
+      name: buildah
+    workspaces:
+      - name: source
+        workspace: shared-workspace
     workspaces:
     - name: source
       workspace: ws
-
-  - name: update-manifest-and-push
-    runAfter:
-    - build-image
-    taskRef:
-      name: {{ .Values.app.name }}-update-manifest
-    params:
-    - name: short-commit
-      value: $(tasks.clone-repository.results.short-commit)
-    - name: target-branch
-      value: $(params.git-branch)
-    - name: config-subdirectory
-      value: helm
-    - name: git-root-directory
-      value: source
-    workspaces:
-    - name: source
-      workspace: ws
+    - name: maven-settings
+      workspace: maven-settings
+  workspaces:
+    - name: shared-workspace
+    - name: maven-settings
+    - name: maven-local-m2
