@@ -117,7 +117,7 @@ spec:
           git_owner: ${{parameters.githubOrg}}
           cluster: ${{parameters.cluster_id}}
           namespace: ${{parameters.namespace}}
-          image_host: ${{parameters.image_host}}
+          image_host: ${{parameters.image_host}}/${{parameters.namespace}}/
           image_name: ${{parameters.component_id}}-backend
           image_tag: ${{parameters.image_tag}}
         targetPath: ./tenant-gitops
