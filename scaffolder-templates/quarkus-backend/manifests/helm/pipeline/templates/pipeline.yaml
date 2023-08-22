@@ -13,7 +13,7 @@ spec:
   - name: git-branch
     default: {{ .Values.git.branch }}
   - name: target-namespace
-    default: {{ .Values.namespace }}
+    default: {{ .Values.app.namespace }}
   - name: output-image
     description: reference of the image that will get created
     default: {{ include "image.url" . }}

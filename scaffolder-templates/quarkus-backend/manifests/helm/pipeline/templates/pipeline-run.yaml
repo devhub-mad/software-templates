@@ -7,7 +7,7 @@ spec:
     name: {{ .Values.app.name }}-pipeline
   params:
     - name: target-namespace
-      value: {{ .Values.namespace }}
+      value: {{ .Values.app.namespace }}
   workspaces:
     - name: maven-settings
       emptyDir: {}
