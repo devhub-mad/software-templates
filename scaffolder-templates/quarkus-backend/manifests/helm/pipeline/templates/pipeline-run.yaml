@@ -7,7 +7,7 @@ spec:
     name: {{ .Values.app.name }}-pipeline
   params:
     - name: target-namespace
-      value: devhubtest
+      value: {{ .Values.namespace }}
   workspaces:
     - name: maven-settings
       emptyDir: {}
