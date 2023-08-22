@@ -5,6 +5,9 @@ metadata:
 spec:
   pipelineRef:
     name: {{ .Values.app.name }}-pipeline
+  params:
+    - name: target-namespace
+      value: devhubtest
   workspaces:
     - name: maven-settings
       emptyDir: {}
