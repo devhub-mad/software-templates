@@ -70,14 +70,14 @@ spec:
           timeoutSeconds: {{ .probeTimeout }}
         {{- end }}
         volumeMounts:
-        - name: {{ .Values.applicationName }}-secret-volume
-          mountPath: /deployments/secret
-        - name: {{ .Values.applicationName }}-config-volume
-          mountPath: /deployments/config
+          - name: {{ .Values.applicationName }}-secret-volume
+            mountPath: /deployments/secret
+          - name: {{ .Values.applicationName }}-config-volume
+            mountPath: /deployments/config
       volumes:
         - name: {{ .Values.applicationName }}-secret-volume
           secret:
             secretName: {{ .Values.applicationName }}-secret
         - name: {{ .Values.applicationName }}-config-volume
           configMap:
-            name: {{ .Values.applicationName }}-config
+            name: orders-config
