@@ -37,18 +37,17 @@ spec:
     workspaces:
     - name: output
       workspace: ws
-
-   - name: package
-      runAfter:
-        - git-clone
-      taskRef:
-        kind: ClusterTask
-        name: maven
-      workspaces:
-        - name: source
-          workspace: source
-        - name: maven-settings
-          workspace: maven-settings
+  - name: package
+    runAfter:
+    - git-clone
+    taskRef:
+      kind: ClusterTask
+      name: maven
+    workspaces:
+      - name: source
+        workspace: source
+      - name: maven-settings
+        workspace: maven-settings
 
   - name: build-image
     runAfter:
