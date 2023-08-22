@@ -79,5 +79,5 @@ spec:
           secret:
             secretName: {{ .Values.applicationName }}-secret
         - name: {{ .Values.applicationName }}-config-volume
-          config:
-            configName: {{ .Values.applicationName }}-config
+          configMap:
+            name: {{ .Values.applicationName }}-config
