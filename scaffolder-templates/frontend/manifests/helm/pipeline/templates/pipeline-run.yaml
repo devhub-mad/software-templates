@@ -1,0 +1,14 @@
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  name: {{ .Values.app.name }}-pipeline-run
+spec:
+  pipelineRef:
+    name: {{ .Values.app.name }}-pipeline
+  params:
+    - name: target-namespace
+      value: {{ .Values.app.namespace }}
+  workspaces:
+    - name: shared-workspace
+      persistentvolumeclaim:
+        claimName: {{ .Values.app.name }}-pipeline-pvc
