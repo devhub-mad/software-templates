@@ -19,7 +19,7 @@ spec:
     default: {{ include "image.url" . }}
     type: string
   workspaces:
-  - name: ws
+  - name: shared-workspace
 
   tasks:
   - name: fetch-repository

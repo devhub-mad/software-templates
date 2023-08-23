@@ -36,12 +36,21 @@ spec:
     workspaces:
       - name: output
         workspace: shared-workspace
+  - name: npm-task
+    runAfter:
+      - fetch-repository
+    taskRef:
+      kind: Task
+      name: npm
+    workspaces:
+      - name: dist
+        workspace: shared-workspace
   - name: build-and-push
     params:
       - name: IMAGE
         value: $(params.output-image)
     runAfter:
-    - fetch-repository
+    - maven-run
     taskRef:
       kind: ClusterTask
       name: buildah
