@@ -19,7 +19,7 @@ spec:
     default: {{ include "image.url" . }}
     type: string
   workspaces:
-  - name: ws
+  - name: shared-workspace
 
   tasks:
   - name: fetch-repository
@@ -50,5 +50,3 @@ spec:
         workspace: shared-workspace
   workspaces:
     - name: shared-workspace
-    - name: maven-settings
-    - name: maven-local-m2
