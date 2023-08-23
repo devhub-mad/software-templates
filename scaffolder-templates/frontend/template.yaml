@@ -108,7 +108,7 @@ spec:
         url: ./manifests
         copyWithoutTemplating: []
         values:
-          component_id: ${{parameters.component_id}}
+          component_id: ${{parameters.component_id}}-frontend
           description: ${{parameters.description}}
           destination: https://github.com/${{parameters.githubOrg}}/${{parameters.component_id}}-frontend-gitops
           source_repository: https://github.com/${{parameters.githubOrg}}/${{parameters.component_id}}-frontend

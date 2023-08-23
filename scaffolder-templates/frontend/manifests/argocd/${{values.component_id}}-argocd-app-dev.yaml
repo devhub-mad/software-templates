@@ -2,12 +2,12 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: ${{values.component_id}}
+  name: ${{values.component_id}}-frontend
   namespace: ${{values.namespace}}
   labels:
-    argocd/app-name: ${{values.component_id}}
+    argocd/app-name: ${{values.component_id}}-frontend
   annotations:
-    argocd/app-name: ${{values.component_id}}
+    argocd/app-name: ${{values.component_id}}-frontend
   finalizers:
     - resources-finalizer.argocd.argoproj.io  
 spec:
