@@ -1,10 +1,10 @@
+---
 kind: Deployment
 apiVersion: apps/v1
 metadata:
   name: {{ .Values.applicationName }}
   labels:
     app: {{ .Values.applicationName }}
-    backstage.io/kubernetes-id: {{ .Values.applicationName }}
 spec:
   strategy:
     type: {{ .Values.deploymentStrategy.type }}
@@ -70,9 +70,10 @@ spec:
           timeoutSeconds: {{ .probeTimeout }}
         {{- end }}
         volumeMounts:
-          - name: {{ .Values.applicationName }}-secret-volume
-            mountPath: /deployments/secret
+        - name: {{ .Values.applicationName }}-nginx-volume
+          mountPath: /etc/nginx/nginx.conf
+          subPath: nginx.conf
       volumes:
-        - name: {{ .Values.applicationName }}-secret-volume
-          secret:
-            secretName: {{ .Values.applicationName }}-secret
+        - name: {{ .Values.applicationName }}-nginx-volume
+          configMap:
+            name: {{ .Values.applicationName }}-nginx-config
