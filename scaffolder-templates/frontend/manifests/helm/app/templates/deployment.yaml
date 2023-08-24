@@ -4,7 +4,6 @@ apiVersion: apps/v1
 metadata:
   name: {{ .Values.applicationName }}
   labels:
-    app: {{ .Values.applicationName }}
     {{- include "backstage.labels" . | nindent 4 }}
     {{- include "nodejs-template.labels" . | nindent 4 }}
 spec:
@@ -24,8 +23,8 @@ spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      deployment: {{ .Values.applicationName }}
-      {{- include "nodejs-template.selectorLabels" . | nindent 6 }}
+      {{- include "backstage.labels" . | nindent 4 }}
+      {{- include "nodejs-template.labels" . | nindent 4 }}
   template:
     metadata:
       name: {{ .Values.applicationName }}
