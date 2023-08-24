@@ -24,7 +24,7 @@ spec:
   selector:
 selector:
     matchLabels:
-      {{- include "quarkus-template.selectorLabels" . | nindent 6 }}
+      {{- include "nodejs-template..selectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
