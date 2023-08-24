@@ -5,7 +5,7 @@ metadata:
   name: {{ .Values.applicationName }}
   labels:
     {{- include "backstage.labels" . | nindent 4 }}
-    {{- include "nodejs-template.labels" . | nindent 4 }}
+    {{- include "frontend.labels" . | nindent 4 }}
 spec:
   strategy:
     type: {{ .Values.deploymentStrategy.type }}
@@ -24,7 +24,7 @@ spec:
   selector:
 selector:
     matchLabels:
-      {{- include "nodejs-template..selectorLabels" . | nindent 6 }}
+      {{- include "frontend..selectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -33,10 +33,10 @@ selector:
       {{- end }}
       labels:
         {{- include "backstage.labels" . | nindent 8 }}
-        {{- include "nodejs-template.selectorLabels" . | nindent 8 }}
+        {{- include "frontend.selectorLabels" . | nindent 8 }}
     spec:
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriod | default 60 }}
-      serviceAccountName: {{ include "nodejs-template.serviceAccountName" . }}
+      serviceAccountName: {{ include "frontend.serviceAccountName" . }}
       containers:
       - name: {{ .Values.applicationName }}
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
