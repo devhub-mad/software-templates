@@ -72,7 +72,7 @@ spec:
         {{- end }}
         volumeMounts:
           - name: {{ .Values.applicationName }}-secret-volume
-            mountPath: /deployments/secret
+            mountPath: /deployments/config
       volumes:
         - name: {{ .Values.applicationName }}-secret-volume
           secret:

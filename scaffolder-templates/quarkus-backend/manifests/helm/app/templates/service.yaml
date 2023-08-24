@@ -10,6 +10,6 @@ spec:
 metadata:
   name: {{ .Values.applicationName }}
   labels:
-    app: {{ .Values.applicationName }}
+    {{- include "quarkus-backend.labels" . | nindent 4 }}
   annotations:
     description: The web server's http port
