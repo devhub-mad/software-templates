@@ -26,7 +26,7 @@ spec:
       name: ARGS
       type: array
     - default: >-
-        docker.io/library/node:12-alpine@sha256:dfbebf17bfb014e1e7068e76325a117bccf8679c68aec6a28514184a209c8bae
+        docker.io/library/node:20-alpine3.18
       description: The node image you want to use.
       name: IMAGE
       type: string

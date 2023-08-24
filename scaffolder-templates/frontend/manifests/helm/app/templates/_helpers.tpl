@@ -34,11 +34,11 @@ Create chart name and version as used by the chart label.
 Common labels
 */}}
 {{- define "backstage.labels" -}}
-backstage.io/kubernetes-id: {{ .Values.app.componentId }}
+backstage.io/kubernetes-id: {{ .Values.applicationName }}
 {{- end }}
 
 {{- define "nodejs-template.labels" -}}
-backstage.io/kubernetes-id: {{ .Values.app.componentId }}
+backstage.io/kubernetes-id: {{ .Values.applicationName }}
 helm.sh/chart: {{ include "nodejs-template.chart" . }}
 {{ include "nodejs-template.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
