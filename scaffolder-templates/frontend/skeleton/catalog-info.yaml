@@ -36,7 +36,7 @@ spec:
 apiVersion: backstage.io/v1alpha1
 kind: System
 metadata:
-  name: workshop-system-${{values.namespace}}
+  name: workshop-system-${{values.component_id}}
   tags:
     - backstage
     - janus-idp
