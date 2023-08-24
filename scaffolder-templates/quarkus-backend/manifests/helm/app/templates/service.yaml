@@ -2,7 +2,7 @@ kind: Service
 apiVersion: v1
 spec:
   ports:
-  - name: web
+  - name: {{ .Values.applicationName }}
     port: {{ .Values.port }}
     targetPort: {{ .Values.targetPort }}
   selector:
