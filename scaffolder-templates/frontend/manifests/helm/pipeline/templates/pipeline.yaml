@@ -44,7 +44,7 @@ spec:
         workspace: shared-workspace
     params:
       - name: PATH_CONTEXT
-        value: "app"
+        value: "dist"
       - name: ARGS
         value:
           - clean-install
