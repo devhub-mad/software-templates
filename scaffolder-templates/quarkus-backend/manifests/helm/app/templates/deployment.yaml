@@ -3,8 +3,8 @@ apiVersion: apps/v1
 metadata:
   name: {{ .Values.applicationName }}
   labels:
-    app: {{ .Values.applicationName }}
-    backstage.io/kubernetes-id: {{ .Values.applicationName }}
+    {{- include "backstage.labels" . | nindent 4 }}
+    {{- include "quarkus-template.labels" . | nindent 4 }}
 spec:
   strategy:
     type: {{ .Values.deploymentStrategy.type }}
@@ -22,15 +22,16 @@ spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      deployment: {{ .Values.applicationName }}
+      {{- include "quarkus-template.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       name: {{ .Values.applicationName }}
       labels:
-        deployment: {{ .Values.applicationName }}
-        app: {{ .Values.applicationName }}
+        {{- include "backstage.labels" . | nindent 8 }}
+        {{- include "quarkus-template.selectorLabels" . | nindent 8 }}
     spec:
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriod | default 60 }}
+      serviceAccountName: {{ include "quarkus-template.serviceAccountName" . }}
       containers:
       - name: {{ .Values.applicationName }}
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
