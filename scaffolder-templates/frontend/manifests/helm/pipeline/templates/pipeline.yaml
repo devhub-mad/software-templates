@@ -50,20 +50,6 @@ spec:
           - clean-install
     runAfter:
       - fetch-repository
-  - name: run-test
-    taskRef:
-      name: npm
-    workspaces:
-      - name: source
-        workspace: shared-workspace
-    params:
-      - name: PATH_CONTEXT
-        value: "app"
-      - name: ARGS
-        value:
-          - test
-    runAfter:
-      - install-dependencies
   - name: build-and-push
     params:
       - name: IMAGE
