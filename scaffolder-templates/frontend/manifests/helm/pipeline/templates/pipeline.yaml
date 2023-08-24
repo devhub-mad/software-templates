@@ -36,21 +36,40 @@ spec:
     workspaces:
       - name: output
         workspace: shared-workspace
-  - name: npm-task
-    runAfter:
-      - fetch-repository
+  - name: install-dependencies
     taskRef:
-      kind: Task
       name: npm
     workspaces:
-      - name: dist
+      - name: source
         workspace: shared-workspace
+    params:
+      - name: PATH_CONTEXT
+        value: "app"
+      - name: ARGS
+        value:
+          - clean-install
+    runAfter:
+      - fetch-repository
+  - name: run-test
+    taskRef:
+      name: npm
+    workspaces:
+      - name: source
+        workspace: shared-workspace
+    params:
+      - name: PATH_CONTEXT
+        value: "app"
+      - name: ARGS
+        value:
+          - test
+    runAfter:
+      - install-dependencies
   - name: build-and-push
     params:
       - name: IMAGE
         value: $(params.output-image)
     runAfter:
-    - npm-task
+    - run-test
     taskRef:
       kind: ClusterTask
       name: buildah
