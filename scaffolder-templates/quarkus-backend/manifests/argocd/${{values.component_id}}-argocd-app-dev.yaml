@@ -5,9 +5,9 @@ metadata:
   name: ${{values.component_id}}
   namespace: ${{values.namespace}}
   labels:
-    argocd/app-name: ${{values.component_id}}-backend
+    argocd/app-name: ${{values.component_id}}
   annotations:
-    argocd/app-name: ${{values.component_id}}-backend
+    argocd/app-name: ${{values.component_id}}
   finalizers:
     - resources-finalizer.argocd.argoproj.io  
 spec:
