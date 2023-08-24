@@ -4,7 +4,7 @@ metadata:
   name: {{ .Values.applicationName }}
   labels:
     {{- include "backstage.labels" . | nindent 4 }}
-    {{- include "quarkus-template.labels" . | nindent 4 }}
+    {{- include "quarkus-backend.labels" . | nindent 4 }}
 spec:
   strategy:
     type: {{ .Values.deploymentStrategy.type }}
@@ -22,16 +22,16 @@ spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      {{- include "quarkus-template.selectorLabels" . | nindent 6 }}
+      {{- include "quarkus-backend.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       name: {{ .Values.applicationName }}
       labels:
         {{- include "backstage.labels" . | nindent 8 }}
-        {{- include "quarkus-template.selectorLabels" . | nindent 8 }}
+        {{- include "quarkus-backend.selectorLabels" . | nindent 8 }}
     spec:
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriod | default 60 }}
-      serviceAccountName: {{ include "quarkus-template.serviceAccountName" . }}
+      serviceAccountName: {{ include "quarkus-backend.serviceAccountName" . }}
       containers:
       - name: {{ .Values.applicationName }}
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
