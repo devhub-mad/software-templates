@@ -11,7 +11,7 @@ metadata:
   finalizers:
     - resources-finalizer.argocd.argoproj.io  
 spec:
-  project: ${{values.component_id}}
+  project: default
   source:
     repoURL: ${{values.destination}}
     targetRevision: HEAD
