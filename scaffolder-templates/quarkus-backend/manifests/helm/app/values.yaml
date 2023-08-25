@@ -1,4 +1,4 @@
-applicationName: ${{values.component_id}}-backend
+applicationName: ${{values.component_id}}
 namespace: ${{values.namespace}}
 targetEnvironment: dev
 version: "1.0.0"

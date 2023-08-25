@@ -1,14 +1,14 @@
 apiVersion: tekton.dev/v1beta1
 kind: PipelineRun
 metadata:
-  name: {{ .Values.app.name }}-maven-test-pipeline-run
+  name: {{ .Values.app.name }}-pipeline-run
   labels:
     type: pipeline
     backstage.io/kubernetes-id: {{ .Values.app.name }}
     tekton.dev/pipeline: {{ .Values.app.name }}
 spec:
   pipelineRef:
-    name: {{ .Values.app.name }}-pipeline
+    name: {{ .Values.app.name }}
   params:
     - name: target-namespace
       value: {{ .Values.app.namespace }}
