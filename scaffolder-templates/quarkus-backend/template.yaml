@@ -136,7 +136,7 @@ spec:
       name: Create ArgoCD Resources
       action: argocd:create-resources
       input:
-        appName: ${{parameters.namespace}}-gitops
+        appName: ${{parameters.component_id}}-gitops
         argoInstance: main
         namespace: ${{parameters.namespace}}
         repoUrl: https://github.com/${{parameters.githubOrg}}/${{parameters.component_id}}-gitops.git
