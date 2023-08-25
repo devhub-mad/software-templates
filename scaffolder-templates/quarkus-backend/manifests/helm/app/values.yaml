@@ -23,7 +23,7 @@ namespace:
   enabled: true
   name: ${{values.namespace}}
   argocd:
-    name: default
+    name: ${{values.component_id}}
 
 replicaCount: 1
 
