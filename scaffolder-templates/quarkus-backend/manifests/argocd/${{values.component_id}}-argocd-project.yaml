@@ -4,8 +4,6 @@ kind: AppProject
 metadata:
   name: ${{values.component_id}}
   namespace: ${{values.namespace}}
-  labels:
-    argocd.argoproj.io/secret-type: repository
 spec:
   project: ${{values.component_id}}
   destinations:
@@ -13,5 +11,5 @@ spec:
       namespace: ${{values.namespace}}
       server: 'https://kubernetes.default.svc'
   sourceRepos:
-    - url: ${{values.destination}}
+    - ${{values.destination}}
   
