@@ -22,7 +22,6 @@ spec:
     {{- end }}
   replicas: {{ .Values.replicaCount }}
   selector:
-selector:
     matchLabels:
       {{- include "frontend.selectorLabels" . | nindent 6 }}
   template:

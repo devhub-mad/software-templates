@@ -16,7 +16,6 @@ health:
   probeDelay: 5
   probePeriod: 10
   probeTimeout: 2
-imageURL: "quay.io/openshiftlabs/app-mod-ordersfrontend:1.0"
 env: []
 image:
   repository: ${{values.image_host}}/${{values.image_name}}
