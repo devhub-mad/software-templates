@@ -67,7 +67,7 @@ spec:
           description: Image tag to use for storing in the internal registry
         component_id:
           title: Component ID
-          default: ${{parameters.component_id}}-backend
+          default: orders-app
           type: string
           description: Comp Id
   steps:
@@ -82,7 +82,8 @@ spec:
           owner: ${{parameters.owner}}
           cluster_id: ${{parameters.cluster_id}}
           namespace: ${{parameters.namespace}}
-          component_id: ${{parameters.component_id}}-backend
+          component_id: ${{parameters.component_id}}
+          repoName: ${{parameters.component_id}}
     - id: publishSource
       name: Publishing to Source Code Repository
       action: publish:github
@@ -91,7 +92,7 @@ spec:
         allowedHosts:
           - github.com
         description: ${{parameters.description}}
-        repoUrl: github.com?owner=${{parameters.githubOrg}}&repo=${{parameters.component_id}}-backend
+        repoUrl: github.com?owner=${{parameters.githubOrg}}&repo=${{parameters.component_id}}
         defaultBranch: main
         protectDefaultBranch: false
         repoVisibility: public    
@@ -110,23 +111,23 @@ spec:
         values:
           component_id: ${{parameters.component_id}}
           description: ${{parameters.description}}
-          destination: https://github.com/${{parameters.githubOrg}}/${{parameters.component_id}}-backend-gitops
-          source_repository: https://github.com/${{parameters.githubOrg}}/${{parameters.component_id}}-backend
-          repository_name: ${{parameters.component_id}}-backend
+          destination: https://github.com/${{parameters.githubOrg}}/${{parameters.component_id}}-gitops
+          source_repository: https://github.com/${{parameters.githubOrg}}/${{parameters.component_id}}
+          repository_name: ${{parameters.component_id}}
           git_owner: ${{parameters.githubOrg}}
           cluster: ${{parameters.cluster_id}}
           namespace: ${{parameters.namespace}}
-          image_host: ${{parameters.image_host}}
-          image_name: ${{parameters.component_id}}-backend
+          image_host: ${{parameters.image_host}}/${{parameters.namespace}}
+          image_name: ${{parameters.component_id}}
           image_tag: ${{parameters.image_tag}}
         targetPath: ./tenant-gitops
     - id: publishGitops
       name: Publishing to Deployment Resource Repository
       action: publish:github
       input:
-        repoUrl: github.com?owner=${{parameters.githubOrg}}&repo=${{parameters.component_id}}-backend-gitops
-        title: gitops resources for ${{parameters.namespace}}-app-backend-app
-        description: gitops resources for ${{parameters.namespace}}-app-backend-app
+        repoUrl: github.com?owner=${{parameters.githubOrg}}&repo=${{parameters.component_id}}-gitops
+        title: gitops resources for ${{parameters.namespace}}-gitops
+        description: gitops resources for ${{parameters.namespace}}-gitops
         sourcePath: ./tenant-gitops
         defaultBranch: main
         protectDefaultBranch: false
@@ -135,10 +136,10 @@ spec:
       name: Create ArgoCD Resources
       action: argocd:create-resources
       input:
-        appName: ${{parameters.namespace}}-app-backend-app-bootstrap
+        appName: ${{parameters.component_id}}-gitops
         argoInstance: main
         namespace: ${{parameters.namespace}}
-        repoUrl: https://github.com/${{parameters.githubOrg}}/${{parameters.component_id}}-backend-gitops.git
+        repoUrl: https://github.com/${{parameters.githubOrg}}/${{parameters.component_id}}-gitops.git
         path: 'argocd/'
   output:
     links:

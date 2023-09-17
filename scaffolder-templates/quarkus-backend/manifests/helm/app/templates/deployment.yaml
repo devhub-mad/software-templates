@@ -1,58 +1,79 @@
-apiVersion: apps/v1
 kind: Deployment
+apiVersion: apps/v1
 metadata:
-  name: {{ .Values.app.componentId }}
-  annotations:
-    image.openshift.io/triggers: >-
-      [{"from":{"kind":"ImageStreamTag","name": "{{ .Values.app.componentId }}:latest","namespace":"{{ .Values.app.namespace }}"},"fieldPath":"spec.template.spec.containers[?(@.name==\"quarkus-template\")].image","pause":"false"}]
+  name: {{ .Values.applicationName }}
   labels:
     {{- include "backstage.labels" . | nindent 4 }}
-    {{- include "quarkus-template.labels" . | nindent 4 }}
-    app.openshift.io/runtime: quarkus
+    {{- include "quarkus-backend.labels" . | nindent 4 }}
 spec:
-  {{- if not .Values.autoscaling.enabled }}
+  strategy:
+    type: {{ .Values.deploymentStrategy.type }}
+    {{- if eq .Values.deploymentStrategy.type "RollingUpdate" }}
+    {{- with .Values.deploymentStrategy }}
+    rollingUpdate:
+      maxSurge: {{ .rollingMaxSurge }}
+      maxUnavailable: {{ .rollingMaxUnavailable }}
+    {{- end }}
+    {{- end }}
+    {{- if eq .Values.deploymentStrategy.type "Recreate" }}
+    recreateParams:
+      timeoutSeconds: {{ .Values.deploymentStrategy.timeout }}
+    {{- end }}
   replicas: {{ .Values.replicaCount }}
-  {{- end }}
   selector:
     matchLabels:
-      {{- include "quarkus-template.selectorLabels" . | nindent 6 }}
+      {{- include "quarkus-backend.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
-      annotations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+      name: {{ .Values.applicationName }}
       labels:
         {{- include "backstage.labels" . | nindent 8 }}
-        {{- include "quarkus-template.selectorLabels" . | nindent 8 }}
+        {{- include "quarkus-backend.selectorLabels" . | nindent 8 }}
     spec:
-      {{- with .Values.imagePullSecrets }}
-      imagePullSecrets:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      serviceAccountName: {{ include "quarkus-template.serviceAccountName" . }}
-      securityContext:
-        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriod | default 60 }}
+      serviceAccountName: {{ include "quarkus-backend.serviceAccountName" . }}
       containers:
-        - name: {{ .Chart.Name }}
-          ports:
-            - containerPort: {{ .Values.service.port }}
-              protocol: TCP
-          securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
-          resources:
-            {{- toYaml .Values.resources | nindent 12 }}
-      {{- with .Values.nodeSelector }}
-      nodeSelector:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.affinity }}
-      affinity:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.tolerations }}
-      tolerations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+      - name: {{ .Values.applicationName }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+        imagePullPolicy: Always
+        ports:
+        - name: http
+          containerPort: {{ .Values.port }}
+          protocol: TCP
+        {{- with .Values.env }}
+        env:
+          {{- toYaml . | nindent 12 }}
+        {{- end }}
+        resources: {{ if not .Values.limits}}{}{{end}}
+          {{- if .Values.limits }}
+          limits:
+            cpu: {{ .Values.limits.cpu }}
+            memory: {{ .Values.limits.memory }}
+          {{- end }}
+          {{- if .Values.requests }}
+          requests:
+            cpu: {{ .Values.requests.cpu }}
+            memory: {{ .Values.requests.memory }}
+          {{- end }}
+        {{- with .Values.health }}
+        readinessProbe:
+          httpGet:
+            path: {{ .readinessEndpoint }}
+            port: {{ $.Values.port }}
+          initialDelaySeconds: {{ .probeDelay }}
+          timeoutSeconds: {{ .probeTimeout }}
+        livenessProbe:
+          httpGet:
+            path: {{ .livenessEndpoint }}
+            port: {{ $.Values.port }}
+          periodSeconds: {{ .probePeriod }}
+          initialDelaySeconds: {{ .probeDelay }}
+          timeoutSeconds: {{ .probeTimeout }}
+        {{- end }}
+        volumeMounts:
+          - name: {{ .Values.applicationName }}-secret-volume
+            mountPath: /deployments/config
+      volumes:
+        - name: {{ .Values.applicationName }}-secret-volume
+          secret:
+            secretName: {{ .Values.applicationName }}-secret
